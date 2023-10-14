@@ -1,0 +1,31 @@
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // เชื่อมต่อกับฐานข้อมูล (แทนค่าด้วยข้อมูลของคุณ)
+	$servername = "localhost";
+	$username = "root";
+	$password = "";
+	$dbname = "mydatabase1";
+	$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // รับข้อมูลจากฟอร์ม
+    $username = $_POST["txtUsername"];
+    $password = $_POST["txtPassword"];
+    $name = $_POST["txtName"];
+
+    // นำข้อมูลไปเพิ่มลงในฐานข้อมูล (เช่นตาราง users)
+    $sql = "INSERT INTO member (name,username, password) VALUES ('$name','$username', '$password')";
+
+    if ($conn->query($sql) === TRUE) {
+        header("location: index.html");
+        echo "User registered successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
+}
+?>
