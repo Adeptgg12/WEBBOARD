@@ -57,7 +57,7 @@ $UserID = $_SESSION["UserID"];
                             <?php
                             if ($Status == "ADMIN") {
                                 echo '<li class="nav-item active">
-                                <a class="nav-link" href="mypost.php">หลังบ้าน<span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="testadmin.php">หลังบ้าน<span class="sr-only">(current)</span></a>
                             </li>';
                             } else {
                             }
@@ -138,7 +138,7 @@ $UserID = $_SESSION["UserID"];
                             <th scope="col" width="20%">Username</th>
                             <th scope="col" width="15%">Password</th>
                             <th scope="col" width="15%">Status</th>
-                            <th scope="col" width="10%">Edit</th>
+                            <th scope="col" width="10%">Action</th>
                         </tr>
                     </thead>
                     <?php
@@ -146,20 +146,19 @@ $UserID = $_SESSION["UserID"];
                     $result = $conn->query($sql);
 
                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<tr>";
-                        echo '<td>' . $row["UserID"] . '</td>';
-                        echo '<td>' . $row["name"] . '</td>';
-                        echo '<td>' . $row["username"] . '</td>';
-                        echo '<td>' . $row["password"] . '</td>';
-                        echo '<td>' . $row["Status"] . '</td>';
-                        echo '<td><button class="btn btn-info" onclick="editmember(' . $row["UserID"] . ')">Edit</button></td>';
-                        echo "</tr>";
-                    }
-
-                    function insertLineBreaks($text, $maxLength)
-                    {
-                        // Add line breaks after the specified character count
-                        return wordwrap($text, $maxLength, "<br>", true);
+                        echo "
+                            <tr>
+                                <th>$row[UserID]</th>
+                                <td>$row[name]</td>
+                                <td>$row[username]</td>
+                                <td>$row[password]</td>
+                                <td>$row[Status]</td>
+                                <td>
+                                <a class='btn btn-success' href='editadminuser.php?UserID=$row[UserID]'>Edit</a>
+                                <a class='btn btn-danger' href='deletemember.php?UserID=$row[UserID]'>Delete</a>
+                                </td>
+                            </tr>
+                            ";
                     }
                     ?>
                 </table>

@@ -1,13 +1,39 @@
+<?php
+session_start();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mydatabase1";
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // ถ้าไม่มี session หรือไม่ตรงกับค่าที่ต้องการ ให้ redirect ผู้ใช้ไปยังหน้า login หรือหน้าที่เหมาะสม
+    header('Location: index.html'); // แก้ไปยังหน้า login ของคุณ
+    exit;
+}
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "failed" . $e->getMessage();
+}
+$student = $_SESSION['username'];
+$Status = $_SESSION['Status'];
+$UserID = $_SESSION["UserID"];
+?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>ฟอร์มแก้ไขข้อมูล</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/bootstrap-theme.css" rel="stylesheet" type="text/css">
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <style>
         h2 {
             font-family: "JasmineUPC";
@@ -15,67 +41,169 @@
         }
     </style>
 </head>
+
 <body>
-    <form name="editForm" action="save_editmember.php" method="post">
-    <?php
-    session_start(); // เริ่มเซสชันเพื่อตรวจสอบการล็อกอิน
+<div class="container-fluid p-0">
+        <div class="row">
+            <div class="col col-sm-12">
+                <nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+                    <a class="navbar-brand" href="test.php"><img src="img/logo.png" alt="#" width="110" height="40"></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="test.php">หน้าหลัก <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="mypost.php">โพสต์ของฉัน<span class="sr-only">(current)</span></a>
+                            </li>
 
-    if(isset($_SESSION['UserID'])){ // ตรวจสอบว่ามีผู้ใช้ล็อกอินอยู่หรือไม่
+                            <?php
+                            if ($Status == "ADMIN") {
+                                echo '<li class="nav-item active">
+                                <a class="nav-link" href="mypost.php">หลังบ้าน<span class="sr-only">(current)</span></a>
+                            </li>';
+                            } else {
+                            }
+                            ?>
 
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "mydatabase1";
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-        if(!$conn){
-            die("Connection failed: " . mysqli_connect_error());
-        }
 
-        $UserID = $_GET['UserID'];
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0" action="editusermember.php">
+                            <button class="btn btn-warning" type="submit">แก้ไขข้อมูลส่วนตัว</button>
+                        </form>
+                        <form class="form-inline my-2 my-lg-0" action="savecontent.php" method="post">
+                            <button class="btn btn-success" id="openPopup">ตั้งกระทู้</button>
+                            <div id="postPopup" class="popup">
+                                <div class="popup-content">
+                                    <span id="closePopup" class="close-button">&times;</span>
+                                    <h3>ตั้งกระทู้</h3>
+                                    <hr>
+                                    <form id="postForm" name="frm">
+                                        <input type="hidden" id="commentid" name="Pcommentid" value="0">
+                                        <div class="form-group">
+                                            <label for="postContent">เขียนเนื้อหา</label>
+                                            <br>
+                                            <textarea id="postContent" class="form-control" rows="7" cols="400" name="txtMsg" required></textarea>
+                                        </div>
+                                        <input type="submit" id="butsave" name="save" class="btn btn-success" value="บันทึก">
+                                    </form>
+                                </div>
+                            </div>
+                        </form>
 
-        $sql = "SELECT * FROM member WHERE UserID='$UserID'";
-        $query = mysqli_query($conn, $sql);
-        $result = mysqli_fetch_array($query);
+                        <form class="form-inline my-2 my-lg-0" action="logout.php">
+                            <button class="btn btn-danger" type="button" onclick="showLogoutModal()">ออกจากระบบ</button>
+                        </form>
+                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="logoutModalLabel">ยืนยันการออกจากระบบ</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        คุณต้องการออกจากระบบหรือไม่?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                                        <button type="button" class="btn btn-danger" onclick="logout()">ยืนยัน</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-        if (!$result) {
-            echo "ไม่พบข้อมูล UserID " . $UserID;
-        } else {
-        ?>
-            <div class="container">
-                <div class="alert alert-success">
-                    <h2 style="color:Tomato;">แก้ไขข้อมูลส่วนตัว</h2>
-                </div>
-                <table class="table table-hover table-bordered">
-                    <tr>
-                        <th width="150">ลำดับสมาชิก</th>
-                        <td width="240">
-                            <input type="hidden" name="UserID" value="<?php echo $result["UserID"]; ?>">
-                            <?php echo $result["UserID"]; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="150">ชื่อผู้ใช้งาน</th>
-                        <td width="240"><input type="text" class="form-control" name="username" value="<?php echo $result["username"]; ?>"></td>
-                    </tr>
-                    <tr>
-                        <th width="150">รหัสผ่าน</th>
-                        <td width="240"><input type="password" class="form-control" name="password" value="<?php echo $result["password"]; ?>"></td>
-                    </tr>
-                    <tr>
-                        <th width="150">ชื่อลูกค้า</th>
-                        <td width="240"><input type="text" class="form-control" name="name" value="<?php echo $result["name"]; ?>"></td>
-                    </tr>
-                </table>
-                <center><button type="submit" class="btn btn-primary">Submit</button></center>
+                        <script>
+                            function showLogoutModal() {
+                                $('#logoutModal').modal('show');
+                            }
+
+                            function logout() {
+                                window.location.href = 'logout.php';
+                                $('#logoutModal').modal('hide');
+                            }
+                        </script>
+                    </div>
+                </nav>
             </div>
+        </div>
+    </div>
+    <form name="editForm" action="sadmin_editmember.php" method="post">
         <?php
+
+        if (isset($_SESSION['UserID'])) {
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "mydatabase1";
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+
+            $UserID = $_GET['UserID'];
+
+            $sql = "SELECT * FROM member WHERE UserID='$UserID'";
+            $query = mysqli_query($conn, $sql);
+
+            if (!$query) {
+                echo "ไม่พบข้อมูล UserID " . $UserID;
+            } else {
+        ?>
+
+                <div class="container-fluid p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr class="table-danger">
+                                        <th scope="col" width="20%">UserID</th>
+                                        <th scope="col" width="20%">Name</th>
+                                        <th scope="col" width="20%">Username</th>
+                                        <th scope="col" width="15%">Password</th>
+                                        <th scope="col" width="15%">Status</th>
+                                        <th scope="col" width="10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody> <!-- Added tbody tag -->
+                                    <?php
+                                    while ($row = mysqli_fetch_assoc($query)) { // Fixed the fetch statement
+                                        echo "
+                                                <tr>
+                                                    <td>
+                                                        <input type='hidden' name='UserID' value='" . $row['UserID'] . "'>
+                                                        " . $row['UserID'] . "
+                                                    </td>
+                                                    <td><input type='text' class='form-control' name='name' value='" . $row["name"] . "'></td>
+                                                    <td><input type='text' class='form-control' name='username' value='" . $row["username"] . "'></td>
+                                                    <td><input type='password' class='form-control' name='password' value='" . $row["password"] . "'></td>
+                                                    <td>" . $row['Status'] . "</td>
+                                                    <td>
+                                                    <input type='submit' class='btn btn-success' value='Save'>
+                                                    </td>
+                                                </tr>
+                                            ";
+                                    }
+                                    ?>
+                                </tbody> <!-- Added closing tbody tag -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        <?php
+            }
         }
-        mysqli_close($conn);
-    } else {
-        echo "กรุณาล็อกอินก่อนเข้าถึงหน้านี้";
-    }
-    ?>
+        ?>
     </form>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -26,11 +27,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Update the record
     $sql = "UPDATE member SET username='$username', Password='$password', name='$name' WHERE UserID=$UserID";
-
+    $Status = $_SESSION['Status'];
     if (mysqli_query($conn, $sql)) {
         echo "แก้ไขข้อมูลเรียบร้อย";
-        // Uncomment the following line to redirect to listmember.php
-        // header("Location: listmember.php");
+        if($Status == "ADMIN"){
+            header("Location: listmember.php");
+        }
+        if($Status == "USER"){
+            header("Location: test.php");
+        }
         exit();
     } else {
         echo "Error updating record: " . mysqli_error($conn);
