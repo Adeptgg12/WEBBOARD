@@ -130,7 +130,7 @@ try {
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h3>ตอบกลับโพสต์</h3>
+                <center><h3>ตอบกลับโพสต์</h3></center>
                 <h6>โพสต์โดย: <?php echo $post['student']; ?></h6>
                 <h6>วันที่: <?php echo $post['date']; ?></h6>
                 <h6>เนื้อหา:&nbsp;&nbsp;&nbsp;
@@ -190,7 +190,7 @@ try {
                 </style>
                 <form method="get" action="savereply.php">
                     <div class="form-group">
-                        <label for="replyMsg">ข้อความตอบกลับ</label>
+                        <label for="replyMsg" style="text-align: left;">ข้อความตอบกลับ</label>
                         <textarea class="form-control" id="replyMsg" name="replyMsg" rows="5" required></textarea>
                     </div>
                     <?php
