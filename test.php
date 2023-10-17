@@ -65,8 +65,13 @@ $UserID = $_SESSION["UserID"];
                             ?>
 
 
-
                         </ul>
+                        <form method="post" class="form-inline my-2 my-lg-0" style="margin-left: 25%; margin-right: 25%;" action="search.php">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+
+
                         <form class="form-inline my-2 my-lg-0" action="editusermember.php">
                             <button class="btn btn-warning" type="submit">แก้ไขข้อมูลส่วนตัว</button>
                         </form>

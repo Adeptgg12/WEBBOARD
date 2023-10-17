@@ -63,6 +63,10 @@ try {
                                 <a class="nav-link" href="listmember.php">รายชื่อผู้ใช้<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
+                        <form method="post" class="form-inline my-2 my-lg-0" style="margin-left: 18%; margin-right: 25%;" action="search.php">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
                         <form class="form-inline my-2 my-lg-0" action="editusermember.php">
                             <button class="btn btn-warning" type="submit">แก้ไขข้อมูลส่วนตัว</button>
                         </form>
@@ -133,8 +137,8 @@ try {
                             <th scope="col" width="20%">ว/ด/ป</th>
                             <th scope="col" width="40%">เนื้อหา</th>
                             <th scope="col" width="10%">ผู้เขียน</th>
-                            <th scope="col" width="10%">ตอบกลับ</th>
-                            <th scope="col" width="10%">แก้ไขโพสต์</th>
+                            <th scope="col" width="10%"><center>ตอบกลับ</center></th>
+                            <th scope="col" width="10%"><center>แก้ไขโพสต์</center</th>
                             <th scope="col" width="10%">ลบโพสต์</th>
                         </tr>
                     </thead>
@@ -147,8 +151,8 @@ try {
                         echo "<td>" . $row["date"] . "</td>";
                         echo "<td>" . insertLineBreaks($row["post"], 280) . "</td>";
                         echo "<td>" . $row["student"] . "</td>";
-                        echo '<td><button class="btn btn-info" onclick="replyToPost(' . $row["postID"] . ')">ตอบกลับ</button></td>';
-                        echo '<td><button class="btn btn-primary" onclick="editToPost(' . $row["postID"] . ')">แก้ไข</button></td>';
+                        echo '<td><center><button class="btn btn-info" onclick="replyToPost(' . $row["postID"] . ')">ตอบกลับ</button></center></td>';
+                        echo '<td><center><button class="btn btn-primary" onclick="editToPost(' . $row["postID"] . ')">แก้ไข</button></center></td>';
                         echo '<td><form class="form-inline my-2 my-lg-0" action="delToPost(' . $row["postID"] . ')">
                         <button class="btn btn-danger" type="button" onclick="showdelModal()">ลบโพสต์</button>
                     </form>
