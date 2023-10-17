@@ -19,8 +19,18 @@
       <form action="checkdata.php" method="POST" class="form login">
       <center><img src="img/logo.png" alt="#" width="200" height="100"></center> 
         <?php
-        echo "<center><font color='red'>Username หรือ Password ไม่ถูกต้อง</font></center>";
+        session_start();
+        // echo "<center><font color='red'>Username หรือ Password ไม่ถูกต้อง</font></center>";
         ?>
+        <?php if (isset($_SESSION['errorlog'])) : ?>
+          <div class="success">
+            <h3>
+              <?php
+                echo $_SESSION['errorlog'];
+              ?>
+            </h3>
+          </div>
+        <?php endif ?>
         <div class="form__field">
           <label for="login__username"><svg class="icon">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
@@ -41,7 +51,7 @@
 
       </form>
 
-      <p class="text--center">Not a member? <a href="signup.html">Sign up now</a> <svg class="icon">
+      <p class="text--center">Not a member? <a href="signup.php">Sign up now</a> <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons.svg#arrow-right"></use>
         </svg></p>
 

@@ -203,3 +203,7 @@ p {
 .text--center {
   text-align: center;
 }
+.success{
+  text-align: center;
+  color: red;
+}

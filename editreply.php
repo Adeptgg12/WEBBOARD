@@ -18,10 +18,15 @@
 </head>
 
 <body>
-    
+
     <form name="editForm" action="seditreply.php" method="post">
         <?php
         session_start(); // เริ่มเซสชันเพื่อตรวจสอบการล็อกอิน
+        if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+            // ถ้าไม่มี session หรือไม่ตรงกับค่าที่ต้องการ ให้ redirect ผู้ใช้ไปยังหน้า login หรือหน้าที่เหมาะสม
+            header('Location: index.php'); // แก้ไปยังหน้า login ของคุณ
+            exit;
+        }
         if (isset($_SESSION['UserID'])) { // ตรวจสอบว่ามีผู้ใช้ล็อกอินอยู่หรือไม่
 
             $servername = "localhost";
@@ -41,7 +46,7 @@
                 echo "ไม่พบข้อมูล UserID " . $_SESSION["UserID"];
             } else {
         ?>
-        
+
                 <div class="container">
                     <div class="alert alert-success">
                         <h2 style="color:Tomato;">แก้ไขการตอบกลับ</h2>

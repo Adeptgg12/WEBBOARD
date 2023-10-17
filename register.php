@@ -1,4 +1,8 @@
 <?php
+session_start();
+$errorsup = array();
+array_push($errorsup, "Username มีคนใช้ไปแล้ว");
+$_SESSION['errorup'] = "Username มีคนใช้ไปแล้ว";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // เชื่อมต่อกับฐานข้อมูล (แทนค่าด้วยข้อมูลของคุณ)
     $servername = "localhost";
@@ -6,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = "";
     $dbname = "mydatabase1";
     $conn = mysqli_connect($servername, $username, $password, $dbname);
-
+    $errorsup = array();
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
@@ -28,13 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO member (name, username, password) VALUES ('$name', '$username', '$password')";
 
         if ($conn->query($sql) === TRUE) {
-            header("location: index.html");
+            header("location: index.php");
             echo "User registered successfully";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            header("location: signup.php");
         }
     }
 
     $conn->close();
 }
-?>
