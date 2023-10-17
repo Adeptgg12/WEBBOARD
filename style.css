@@ -188,7 +188,7 @@ input[type='submit'] {
 
 .login input[type='submit']:focus,
 .login input[type='submit']:hover {
-  background-color: #d44179;
+  background-color: #13b929;
 }
 
 /* modules/text.css */
