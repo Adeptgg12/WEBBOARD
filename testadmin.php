@@ -54,19 +54,28 @@ try {
                             $Status = $_SESSION['Status'];
                             if ($Status == "ADMIN") {
                                 echo '<li class="nav-item active">
-                                <a class="nav-link" href="testadmin.php">หลังบ้าน<span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="testadmin.php">จัดการโพสต์<span class="sr-only">(current)</span></a>
                             </li>';
                             }
                             else{}
                             ?>
                             <li class="nav-item active">
-                                <a class="nav-link" href="listmember.php">รายชื่อผู้ใช้<span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="listmember.php">จัดการผู้ใช้<span class="sr-only">(current)</span></a>
                             </li>
                         </ul>
-                        <form method="post" class="form-inline my-2 my-lg-0" style="margin-left: 18%; margin-right: 25%;" action="search.php">
+                        <form method="post" class="form-inline my-2 my-lg-0" style="margin-left: 17%; margin-right: 17%;" action="search.php">
                             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
                         </form>
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link"> Username : <?php echo $_SESSION['username']; ?> <br>
+                                Status&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?php echo $_SESSION['username']; ?>
+                                <span class="sr-only">(current)</span></a>
+                            </li>
+                            <?php
+                            ?>
+                        </ul>
                         <form class="form-inline my-2 my-lg-0" action="editusermember.php">
                             <button class="btn btn-warning" type="submit">แก้ไขข้อมูลส่วนตัว</button>
                         </form>

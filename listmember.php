@@ -66,6 +66,18 @@ $UserID = $_SESSION["UserID"];
 
 
                         </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link"> Username : <?php echo $_SESSION['username']; ?> <br>
+                                Status&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?php echo $_SESSION['username']; ?>
+                                <span class="sr-only">(current)</span></a>
+                            </li>
+                            <?php
+                            ?>
+                        </ul>
+                        </form>
+                        
                         <form class="form-inline my-2 my-lg-0" action="editusermember.php">
                             <button class="btn btn-warning" type="submit">แก้ไขข้อมูลส่วนตัว</button>
                         </form>
